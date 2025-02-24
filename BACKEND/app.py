@@ -1,6 +1,7 @@
 from flask import Flask
 from config import Config
 from extensions import db, migrate  # Import from extensions
+#from routes.users_route import users_bp
 
 def create_app():
     app = Flask(__name__)
@@ -9,10 +10,13 @@ def create_app():
     db.init_app(app)
 
     # Import models after db is initialized to avoid circular import
-    with app.app_context():
-        from models import User  # Import models inside the function
+    #with app.app_context():
+        #from models import User  # Import models inside the function
 
     migrate.init_app(app, db)  # Initialize Flask-Migrate
+
+     #REGISTER BLUEPRINTS
+    #app.register_blueprint(users_bp,url_prefix = '/auth')  # Register users blueprint
 
     return app
 

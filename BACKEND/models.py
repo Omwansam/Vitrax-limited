@@ -31,9 +31,7 @@ class ShippingStatus(Enum):
 #############################################################################################################     
 
 class User(db.Model):
-
     __tablename__ = 'users'
-
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -45,9 +43,9 @@ class User(db.Model):
     #Relationships mapping the user to the orders
     orders = db.relationship('Order', back_populates="user")
     #Relationships mapping the user to the cart
-    cart = db.relationship('Cart',uselist=False, back_populates="user")
+    shopping_cart = db.relationship('ShoppingCart',uselist=False, back_populates="user")
     #Relationships mapping the user to multiple payment methods
-    payment_methods = db.relationship('PaymentMethod', back_populates="user")
+    payment_method = db.relationship('PaymentMethod', back_populates="user")
     #Relationship mapping the user to multiple wishlists
     wishlists = db.relationship('Wishlist', back_populates="user")
 
@@ -185,7 +183,7 @@ class PaymentMethod(db.Model):
     #Relationship mapping the payment method to the related user
     user = db.relationship('User', back_populates="payment_method")
     #Relationships mapping the payment method to multiple payments
-    payments = db.relationship('Payment', back_populates="payment_method")
+    payment = db.relationship('Payment', back_populates="payment_method")
 
 ################################################################################################################################################################################
 
