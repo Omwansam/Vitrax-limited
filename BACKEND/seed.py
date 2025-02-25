@@ -1,4 +1,4 @@
-from app import create_app
+'''from app import create_app
 from models import User
 from werkzeug.security import generate_password_hash
 from extensions import db
@@ -14,4 +14,4 @@ with app.app_context():
     db.session.add_all(users)
     db.session.commit()
 
-    print("User created successfully")
+    print("User created successfully")'''
