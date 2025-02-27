@@ -1,6 +1,6 @@
 from flask import Flask
 from config import Config
-from extensions import db, migrate  # Import from extensions
+from extensions import db, migrate, jwt  # Import from extensions
 from routes.users_route import users_bp
 
 def create_app():
@@ -8,6 +8,7 @@ def create_app():
     app.config.from_object(Config)
 
     db.init_app(app)
+    jwt.init_app(app)  # Initialize Flask-JWT
 
     # Import models after db is initialized to avoid circular import
     with app.app_context():
