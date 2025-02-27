@@ -92,6 +92,8 @@ class Product(db.Model):
     reviews = db.relationship('Review', back_populates="product")
     #Relationship mapping products to multiple order items
     order_items = db.relationship('OrderItem', back_populates="product")
+    # Relationship with ProductImage
+    images = db.relationship('ProductImage', back_populates='product', cascade='all, delete-orphan')
 
 
 
@@ -280,13 +282,19 @@ class Promotion(db.Model):
 ###############################################################################################################################################################################
 
 class ProductImage(db.Model):
-    __tablename__ ='product_images'
-    
+    __tablename__ = 'product_images'
+
     image_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     image_url = db.Column(db.String(200), nullable=False)
     is_primary = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, server_default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, server_default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+
+    # Foreign Key to associate images with a product
+    product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)
+
+    # Relationship mapping images to a product
+    product = db.relationship('Product', back_populates='images')
 
 ###########################################################################################################################################################
 class ShippingInformation(db.Model):

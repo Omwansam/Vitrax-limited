@@ -2,6 +2,12 @@ from flask import Flask
 from config import Config
 from extensions import db, migrate, jwt  # Import from extensions
 from routes.users_route import users_bp
+from routes.products_route import product_bp
+from routes.order_route import order_bp
+from routes.productImage_route import product_image_bp
+from routes.category_route import category_bp
+from routes.review_route import review_bp
+from routes.promotion_route import promotion_bp
 
 def create_app():
     app = Flask(__name__)
@@ -18,6 +24,12 @@ def create_app():
 
      #REGISTER BLUEPRINTS
     app.register_blueprint(users_bp,url_prefix = '/auth')  # Register users blueprint
+    app.register_blueprint(product_bp,url_prefix = '/products') # Register products blueprint
+    app.register_blueprint(order_bp,url_prefix = '/orders') # Register
+    app.register_blueprint(product_image_bp,url_prefix = '/productimages') # Register
+    app.register_blueprint(category_bp,url_prefix = '/categories') # Register categories blueprint
+    app.register_blueprint(review_bp,url_prefix = '/reviews') # Register reviews blueprint
+    app.register_blueprint(promotion_bp,url_prefix = '/promotions') # Register promotions blueprint
 
     return app
 
