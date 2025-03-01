@@ -1,5 +1,9 @@
+*{
+  margin: 0;
+  padding: 0;
+}
 .signup-container {
-  min-height: 100vh;
+  min-height: 93vh;
   display: flex;
   width: 100%;
   justify-content: center;
@@ -49,7 +53,7 @@
 .form-label {
   display: block;
   font-size: 1.07rem;
-  color: #0f0000;
+  color: #000;
   margin-bottom: 0.7rem;
 
 }
@@ -62,7 +66,7 @@
   border: 1px solid #d1d5db;
   border-radius: 4px;
   font-size: 1rem;
-  color: #000;
+  color: #fff;
   outline: none;
 }
 
@@ -128,8 +132,8 @@
 }
 
 .social-button {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
