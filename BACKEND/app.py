@@ -1,6 +1,7 @@
 from flask import Flask
 from config import Config
 from extensions import db, migrate, jwt  # Import from extensions
+from flask_cors import CORS
 from routes.users_route import users_bp
 from routes.products_route import product_bp
 from routes.order_route import order_bp
@@ -11,6 +12,7 @@ from routes.promotion_route import promotion_bp
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)  
     app.config.from_object(Config)
 
     db.init_app(app)
