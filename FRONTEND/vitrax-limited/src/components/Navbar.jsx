@@ -1,37 +1,60 @@
-import React from 'react'
+import React, {useState} from 'react'
 import './Navbar.css'
+import { Link } from "react-router-dom";
 import { FaUser, FaSearch, FaHeart, FaShoppingCart } from 'react-icons/fa'
 
 const Navbar = () => {
+
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+
   return (
-    <>
-    <div className='navbar-container'>
-    <div className="nav-links">
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Shop</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
-            <div className="nav-icons">
-            <li><a href="#"><FaUser /></a></li>
-            <li><a href="#"><FaSearch /></a></li>
-            <li><a href="#"><FaHeart /></a></li>
-            <li><a href="#"><FaShoppingCart /></a></li>
-            </div>
+    <nav className="navbar">
+      <div className="nav-container">
+
+
+        {/* Navigation Links*/}
+        <ul className="nav-links">
+          <li><Link to="/" className="nav-link">Home</Link></li>
+          <li><Link to="/shop" className="nav-link">Shop</Link></li>
+          <li><Link to="/about" className="nav-link">About</Link></li>
+          <li><Link to="/contact" className="nav-link">Contact</Link></li>
         </ul>
 
-    </div>
-   
-    
-   <div className="header">
-    <div className='sub-header'>
-   <h1>Rocket single seater</h1>
-   <a href="#" className="btn">Shop Now</a>
-   </div>
-       <img src="Header.jpg" alt="" />
-   </div>
-   </div>
-    </>
+        {/*Right Side Icons */}
+        <div className="nav-icons">
+          <Link to="">
+          <button className="icon-btn">
+            <FaUser className="icon" />
+          </button>
+          </Link>
+
+          {/** Search Icon */}
+          <button className="icon-btn search-btn" onClick={() => setIsSearchOpen(!isSearchOpen)}>
+            <FaSearch className="icon" />
+          </button>
+
+          {/** Search Input (Toggle Visiblity) */}
+          {isSearchOpen && (
+            <input type="text" placeholder="Search......." className="search-input"/>
+          )}
+
+          {/*Favourites Icon*/}
+          <Link to="">
+          <button className="icon-btn">
+            <FaHeart className="icon" />
+          </button>
+          </Link>
+
+          {/*Shopping Cart Icon */}
+          <Link to="">
+          <button className="icon-btn">
+            <FaShoppingCart className="icon" />
+          </button>
+          </Link>
+
+        </div>
+      </div>
+    </nav>
   )
 }
 
