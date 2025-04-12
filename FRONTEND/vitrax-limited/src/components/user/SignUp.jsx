@@ -3,7 +3,10 @@ import './SignUpForm.css';
 import { FaEye, FaEyeSlash, FaUser, FaEnvelope, FaLock, FaFacebookF, FaTwitter, FaGithub } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
+
+const BASE_URL = "http://127.0.0.1:5000/auth";
 const SignUpForm = () => {
+
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -67,9 +70,11 @@ const SignUpForm = () => {
         if (!validateForm()) return;
 
         setLoading(true);
+        setErrors({});
+
 
         try {
-            const response = await fetch('http://127.0.0.1:5555/auth/register', {
+            const response = await fetch(`${BASE_URL}/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

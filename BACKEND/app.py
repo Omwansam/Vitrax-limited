@@ -11,6 +11,8 @@ from routes.review_route import review_bp
 from routes.promotion_route import promotion_bp
 
 def create_app():
+    
+    
     app = Flask(__name__)
     CORS(app)  
     app.config.from_object(Config)
@@ -26,7 +28,7 @@ def create_app():
 
      #REGISTER BLUEPRINTS
     app.register_blueprint(users_bp,url_prefix = '/auth')  # Register users blueprint
-    app.register_blueprint(product_bp,url_prefix = '/products') # Register products blueprint
+    app.register_blueprint(product_bp,url_prefix = '/api') # Register products blueprint
     app.register_blueprint(order_bp,url_prefix = '/orders') # Register
     app.register_blueprint(product_image_bp,url_prefix = '/productimages') # Register
     app.register_blueprint(category_bp,url_prefix = '/categories') # Register categories blueprint
@@ -35,6 +37,15 @@ def create_app():
 
     return app
 
+
+# create a route
+
+
+
+# Run the application
+
+
+
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=True, port=5555)
+    app.run(debug=True, port=5000)

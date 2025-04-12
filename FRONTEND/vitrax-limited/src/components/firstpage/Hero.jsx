@@ -12,7 +12,7 @@ const Hero = () => {
             
                 <div className='hero-text'>
                     <h1 className='heading'>Rocket single seater</h1>
-                    <Link to=''>
+                    <Link to='/shop'>
                     <p className='shop-now'>Shop Now</p>
                     </Link>
                 

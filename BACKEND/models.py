@@ -74,6 +74,7 @@ class Category(db.Model):
 
 
 class Product(db.Model):
+    """Product Table"""
     __tablename__ = 'products'
 
     product_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -282,6 +283,7 @@ class Promotion(db.Model):
 ###############################################################################################################################################################################
 
 class ProductImage(db.Model):
+    """Product Images Table"""
     __tablename__ = 'product_images'
 
     image_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
