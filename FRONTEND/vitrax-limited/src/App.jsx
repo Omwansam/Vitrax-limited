@@ -23,6 +23,7 @@ import OrdersManagement from "./components/admin/OrdersManagement";
 import CustomerManagement from "./components/admin/CustomerManagement";
 import Analytics from "./components/admin/Analytics";
 import Settings from "./components/admin/Settings";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 
 
@@ -47,17 +48,17 @@ function App() {
 
 
         {/**Admin Routes */}
-        <Route path="admin/*" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
-          <Route path="products" element={<ProductsManagement/>} />
-          <Route path="products/add" element={<AddProduct />} />
-          <Route path="orders" element={<OrdersManagement />} />
-          <Route path="customers" element={<CustomerManagement />} />
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="settings" element={<Settings />} />
-          
-        </Route>
-        
+        <Route element={<ProtectedRoute adminOnly />}>
+          <Route path="admin/*" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="products" element={<ProductsManagement/>} />
+            <Route path="products/add" element={<AddProduct />} />
+            <Route path="orders" element={<OrdersManagement />} />
+            <Route path="customers" element={<CustomerManagement />} />
+            <Route path="analytics" element={<Analytics />} />
+            <Route path="settings" element={<Settings />} />
+          </Route>
+        </Route> 
       </Routes>
       <Footer />
     </Router>

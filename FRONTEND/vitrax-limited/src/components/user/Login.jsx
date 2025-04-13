@@ -1,11 +1,13 @@
+// src/components/user/Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { FaEye, FaEyeSlash, FaEnvelope, FaLock } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext'
-import './Login.css'; 
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import './Login.css';
 
-const BASE_URL = 'http://127.0.0.1:5000/auth';
+
+const BASE_URL = 'http://127.0.0.1:5000';
 
 const Login = ({ onLoginSuccess }) => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -13,13 +15,12 @@ const Login = ({ onLoginSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
 
-  const { login } = useAuth(); // pull login function from context
- 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
@@ -43,6 +44,20 @@ const Login = ({ onLoginSuccess }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleLoginSuccess = (responseData) => {
+    const { access_token, refresh_token, user } = responseData;
+    
+    login(user, {
+      access_token,
+      refresh_token
+    });
+
+    const redirectTo = location.state?.from?.pathname || (user.role === 'admin' ? '/admin/dashboard' : '/');
+    navigate(redirectTo);
+
+    if (onLoginSuccess) onLoginSuccess();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -51,50 +66,35 @@ const Login = ({ onLoginSuccess }) => {
     setErrors({});
 
     try {
-      const response = await axios.post(`${BASE_URL}/login`, formData);
-      localStorage.setItem('access_token', response.data.access_token);
-      localStorage.setItem('refresh_token', response.data.refresh_token);
-      
-      // Store user in context (you can fetch full user info if needed)
-      const user = response.data.user;
-      login(user); // Update context state
-      
-      // Redirect based on role
-      if (user.role === 'admin') {
-        navigate('/admin');
-      } else {
-        navigate('/');
+      // Try admin login first
+      try {
+        const adminResponse = await axios.post(`${BASE_URL}/auth/admin/login`, formData);
+        handleLoginSuccess(adminResponse.data);
+        return;
+      } catch (adminError) {
+        // Only proceed to user login if it's a 401 (unauthorized)
+        if (!adminError.response || adminError.response.status !== 401) {
+          throw adminError;
+        }
       }
 
-      if (onLoginSuccess) onLoginSuccess();
-
+      // Try user login if admin login failed
+      const userResponse = await axios.post(`${BASE_URL}/auth/login`, formData);
+      handleLoginSuccess(userResponse.data);
     } catch (error) {
       setErrors({
-        api: error.response?.data?.message || 'Login failed',
+        api: error.response?.data?.message || 'Invalid email or password',
       });
     } finally {
       setLoading(false);
     }
   };
-      {/** 
-      alert('Login successful');
-
-      if (onLoginSuccess) {
-        onLoginSuccess(); // Close the modal on successful login
-      }
-
-      navigate('/'); // Redirect to home page
-    } catch (error) {
-      setErrors({ api: error.response?.data?.message || 'Login failed' });
-    } finally {
-      setLoading(false);
-    }
-  }; **/ }
 
   return (
     <div className="login-container">
       <div className="login-box">
         <h2 className="login-title">Welcome Back</h2>
+
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email" className="form-label">Email Address</label>
@@ -128,7 +128,10 @@ const Login = ({ onLoginSuccess }) => {
                 onChange={handleChange}
                 required
               />
-              <div className="password-toggle" onClick={() => setShowPassword(!showPassword)}>
+              <div
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+              >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </div>
             </div>
@@ -138,7 +141,7 @@ const Login = ({ onLoginSuccess }) => {
           {errors.api && <p className="error-text">{errors.api}</p>}
 
           <button type="submit" className="login-button" disabled={loading}>
-            {loading ? 'Logging In...' : 'Login'}
+            {loading ? <LoadingSpinner small /> : 'Login'}
           </button>
         </form>
       </div>
@@ -147,4 +150,3 @@ const Login = ({ onLoginSuccess }) => {
 };
 
 export default Login;
-

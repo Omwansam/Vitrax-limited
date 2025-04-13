@@ -1,20 +1,20 @@
 // src/components/ProtectedRoute.js
 import { useAuth } from '../context/AuthContext';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
-const ProtectedRoute = ({ adminOnly = false }) => {
+
+const ProtectedRoute = ({ adminOnly = false, redirectPath = '/' }) => {
   const { user, isAdmin, loading } = useAuth();
+  const location = useLocation();
 
-  if (loading) {
-    return <div>Loading...</div>; // Or a spinner
-  }
+  
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   if (adminOnly && !isAdmin()) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={redirectPath} replace />;
   }
 
   return <Outlet />;
